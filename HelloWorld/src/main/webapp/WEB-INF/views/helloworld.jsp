@@ -1,7 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
+<head> 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Spring 4 MVC -HelloWorld</title>
 </head>
@@ -15,8 +17,17 @@
 				<select>
 					<% for (int i = 0; i < 10; i++) { %>
 						<option value=<%=i%>>Client <%=i%></option>
-					<%} %>
-				</select>
+					<%} %> 
+				</select><br><br>
+				    Users
+				    <select>
+					    <c:forEach var="user" items="${users}">
+           					<option value=${user.getId()}>
+	           					${user.getName()}
+	           				</option>
+        				</c:forEach>
+       				</select>
+					
 			</div>
 			<div id="center" style="position: absolute; left: 20%; width: 60%; height: 400px; background-color: #F1F0F0">
 				${message}

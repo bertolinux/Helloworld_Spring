@@ -1,5 +1,7 @@
 package com.programcreek.helloworld.controller;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -40,7 +42,7 @@ public class HelloWorldController {
 	    	cfg = new Configuration().configure().addAnnotatedClass(Users.class);
 	    	sessionFactory = cfg.buildSessionFactory();
 	    	session = sessionFactory.openSession();
-	    	System.out.println("Tutto ok");
+	    	System.out.println("Tutto ok1");
     	} catch (Exception e) {
     		e.printStackTrace();
     	}		
@@ -53,18 +55,23 @@ public class HelloWorldController {
 		HelloWorld obj = (HelloWorld) context.getBean("helloWorld");
 		
 		// Hibernate insert into users table
-		try {
-			Transaction transaction = session.beginTransaction();
-			for (int i = 0; i < 100; i++)
-				session.save(new Users(i,"new " + i)); 
-			transaction.commit();
-            session.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			session.close();
-			e.printStackTrace();
-		}
+//		try {
+//			Transaction transaction = session.beginTransaction();
+//			for (int i = 0; i < 100; i++)
+//				session.save(new Users(i,"new " + i)); 
+//			transaction.commit();
+//            session.close();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block 
+//			session.close();
+//			e.printStackTrace();
+//		}
 		// End of Hibernate
+		
+		List<Users> users = session.createCriteria(Users.class).list();
+		
+		mv.addObject("nuovo", users.get(0).getName());
+		mv.addObject("users", users);
 		
 		mv.addObject("message", obj.getMessage());
 		return mv;
