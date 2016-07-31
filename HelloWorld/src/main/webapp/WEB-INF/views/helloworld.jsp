@@ -4,9 +4,32 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head> 
+<spring:url value="/resources/jquery-3.1.0.min.js" var="jqueryJS" />
+<spring:url value="/search_users" var="search_users" />
+<script src="${jqueryJS}"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Spring 4 MVC -HelloWorld</title>
 </head>
+<script>
+	function searchUser(string) {
+		$.ajax({
+		
+		    url : '${search_users}',
+		    type : 'POST',
+		    data : {
+		        'search_string' : string
+		    },
+		    dataType:'html',
+		    success : function(data) {              
+		        document.getElementById("result").innerHTML = data;
+		    },
+		    error : function(request,error)
+		    {
+		        alert("Request: "+JSON.stringify(request));
+		    }
+		});		
+	}
+</script>
 <body>
 	<center>
 		<h2>Hello World</h2>
@@ -14,11 +37,6 @@
 		<div style="position: absolute; left: 0px; width: 100%; background-color: #FFF8F0">
 	
 			<div id="left" style="position: absolute; left: 0px; width: 20%; height: 400px; background-color: #FFF0F0">
-				<select>
-					<% for (int i = 0; i < 10; i++) { %>
-						<option value=<%=i%>>Client <%=i%></option>
-					<%} %> 
-				</select><br><br>
 				    Users
 				    <select>
 					    <c:forEach var="user" items="${users}">
@@ -27,7 +45,14 @@
 	           				</option>
         				</c:forEach>
        				</select>
-					
+       				<br><br>
+       				<form name="searchForm">
+					Search... <input type=text name="search">
+					<input type=button onclick="searchUser(this.form.search.value)" value=Search>
+					</form>
+					<br>
+					<div id="result">					
+					</div>
 			</div>
 			<div id="center" style="position: absolute; left: 20%; width: 60%; height: 400px; background-color: #F1F0F0">
 				${message}

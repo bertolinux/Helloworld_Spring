@@ -5,8 +5,11 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -40,7 +43,7 @@ public class HelloWorldController {
 
     	try {
 	    	cfg = new Configuration().configure().addAnnotatedClass(Users.class);
-	    	sessionFactory = cfg.buildSessionFactory();
+	    	sessionFactory = cfg.buildSessionFactory(new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build());
 	    	session = sessionFactory.openSession();
 	    	System.out.println("Tutto ok1");
     	} catch (Exception e) {
@@ -68,6 +71,7 @@ public class HelloWorldController {
 //		}
 		// End of Hibernate
 		
+		@SuppressWarnings("unchecked")
 		List<Users> users = session.createCriteria(Users.class).list();
 		
 		mv.addObject("nuovo", users.get(0).getName());
@@ -76,4 +80,29 @@ public class HelloWorldController {
 		mv.addObject("message", obj.getMessage());
 		return mv;
 	}	
+	
+	@RequestMapping("/search_users")
+	public ModelAndView search_users(
+			@RequestParam(value = "search_string", required = true, defaultValue = "") String startsWith) {
+    	try {
+	    	cfg = new Configuration().configure().addAnnotatedClass(Users.class);
+	    	sessionFactory = cfg.buildSessionFactory(new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build());
+	    	session = sessionFactory.openSession();
+	    	System.out.println("Tutto ok1");
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+		ModelAndView mv = new ModelAndView("search_users");
+		
+		@SuppressWarnings("unchecked")
+		List<Users> usersFound = session.
+				createCriteria(Users.class).
+				add( Restrictions.like("name", "%"+startsWith+"%")).
+				list();
+		
+		mv.addObject("usersFound", usersFound);
+		return mv;
+	}
+		
+	
 }
