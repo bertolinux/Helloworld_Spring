@@ -10,6 +10,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -25,7 +27,7 @@ public class HelloWorldController {
     private Session session;
     
     public HelloWorldController() {
-
+	
     }
     
 	@RequestMapping("/hello")
@@ -40,15 +42,6 @@ public class HelloWorldController {
 	@RequestMapping("/hello1")
 	public ModelAndView showMessage1(
 			@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
-
-    	try {
-	    	cfg = new Configuration().configure().addAnnotatedClass(Users.class);
-	    	sessionFactory = cfg.buildSessionFactory(new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build());
-	    	session = sessionFactory.openSession();
-	    	System.out.println("Tutto ok1");
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}		
 		
 		ModelAndView mv = new ModelAndView("helloworld");
 		mv.addObject("name", name);
@@ -56,26 +49,11 @@ public class HelloWorldController {
 		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
 		HelloWorld obj = (HelloWorld) context.getBean("helloWorld");
+		 
+//		List<Users> users = session.createCriteria(Users.class).list();
 		
-		// Hibernate insert into users table
-//		try {
-//			Transaction transaction = session.beginTransaction();
-//			for (int i = 0; i < 100; i++)
-//				session.save(new Users(i,"new " + i)); 
-//			transaction.commit();
-//            session.close();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block 
-//			session.close();
-//			e.printStackTrace();
-//		}
-		// End of Hibernate
-		
-		@SuppressWarnings("unchecked")
-		List<Users> users = session.createCriteria(Users.class).list();
-		
-		mv.addObject("nuovo", users.get(0).getName());
-		mv.addObject("users", users);
+//		mv.addObject("nuovo", users.get(0).getName());
+//		mv.addObject("users", users);
 		
 		mv.addObject("message", obj.getMessage());
 		return mv;
@@ -84,6 +62,50 @@ public class HelloWorldController {
 	@RequestMapping("/search_users")
 	public ModelAndView search_users(
 			@RequestParam(value = "search_string", required = true, defaultValue = "") String startsWith) {
+
+		ModelAndView mv = new ModelAndView("search_users");
+    	try {
+	    	cfg = new Configuration().configure().addAnnotatedClass(Users.class);
+	    	sessionFactory = cfg.buildSessionFactory(new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build());
+	    	session = sessionFactory.openSession();
+	    	System.out.println("Tutto ok1");
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}		
+		@SuppressWarnings("unchecked")
+		List<Users> usersFound = session.
+				createCriteria(Users.class).
+				add( Restrictions.like("name", "%"+startsWith+"%")).
+				list();
+		
+		// List to JSON conversion using JAVA
+		JSONObject usersFoundJson = new JSONObject();
+		JSONArray usersFoundJsonArray = new JSONArray();
+		for (int i=0; i < usersFound.size(); i++) {
+			JSONObject user = new JSONObject();
+			user.put("name", usersFound.get(i).getName());
+			usersFoundJsonArray.put(user);
+		}
+		usersFoundJson.put("usersFound", usersFoundJsonArray);
+		
+		/* List to JSON conversion using JSP	
+		<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+		<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+		<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+		{"usersFound": [
+			 <c:forEach var="user" items="${usersFound}">
+				{ "name": "${user.getName()}"},
+			</c:forEach>{}
+		]}*/
+		
+		session.close();
+		mv.addObject("usersFoundJson", usersFoundJson.toString()); 
+		return mv;
+	}
+	
+	@RequestMapping("/insert_users")
+	public ModelAndView insert_users(
+			@RequestParam(value = "n_users", required = true, defaultValue = "") String n_users) {
     	try {
 	    	cfg = new Configuration().configure().addAnnotatedClass(Users.class);
 	    	sessionFactory = cfg.buildSessionFactory(new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build());
@@ -92,17 +114,31 @@ public class HelloWorldController {
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
-		ModelAndView mv = new ModelAndView("search_users");
+		ModelAndView mv = new ModelAndView("insert_users");
 		
-		@SuppressWarnings("unchecked")
-		List<Users> usersFound = session.
-				createCriteria(Users.class).
-				add( Restrictions.like("name", "%"+startsWith+"%")).
-				list();
+		String return_insert_users;
+		// Hibernate insert into users table
+		try {
+			Transaction transaction = session.beginTransaction();
+			for (int i = 0; i < new Integer(n_users); i++) {
+				long random = Math.round(Math.random()*(new Integer(n_users)));
+				String random_string = new Long(random).toString();
+				session.save(new Users("User " + random_string)); 
+			}
+			transaction.commit();
+            return_insert_users = new String("OK");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block 
+			e.printStackTrace();
+            return_insert_users = new String("KO");
+		} finally {
+			session.close();
+			
+		}
+		// End of Hibernate
 		
-		mv.addObject("usersFound", usersFound);
+		mv.addObject("return_insert_users", return_insert_users);
 		return mv;
-	}
-		
+	}		
 	
 }

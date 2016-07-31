@@ -2,13 +2,15 @@ package com.programcreek.helloworld.controller;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
 public class Users {
-	@Id
+	@Id	
+	@GeneratedValue
 	@Column(name = "id")
     private int id;
 	@Column(name = "name")
@@ -16,6 +18,10 @@ public class Users {
 	
 	public Users(int id, String name) {
 		this.id = id;
+		this.name = name;
+	}
+	
+	public Users(String name) {
 		this.name = name;
 	}
 
