@@ -8,7 +8,7 @@
   <property name="hibernate.default_schema">helloworld</property>
   <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
   <property name="hibernate.show_sql">true</property>
-  <property name="hibernate.connection.username">root</property>
-  <property name="hibernate.connection.password">bertolinux</property>
+  <property name="hibernate.connection.username">berto</property>
+  <property name="hibernate.connection.password">roberto2016</property>
  </session-factory>
 </hibernate-configuration>

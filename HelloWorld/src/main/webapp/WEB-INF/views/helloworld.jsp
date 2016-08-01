@@ -5,8 +5,8 @@
 <html>
 <head> 
 <spring:url value="/resources/jquery-3.1.0.min.js" var="jqueryJS" />
-<spring:url value="/search_users" var="search_users" />
-<spring:url value="/insert_users" var="insert_users" />
+<spring:url value="/Main/search_users" var="search_users" />
+<spring:url value="/Main/insert_users" var="insert_users" />
 <script src="${jqueryJS}"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Spring 4 MVC -HelloWorld</title>

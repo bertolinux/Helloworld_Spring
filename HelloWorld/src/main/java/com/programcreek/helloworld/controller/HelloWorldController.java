@@ -7,9 +7,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller 
+@Controller
+@RequestMapping("Main")
 public class HelloWorldController {
 	String message = "Welcome to Spring MVC!";
     private Configuration cfg;
@@ -39,7 +39,7 @@ public class HelloWorldController {
 		return mv;
 	}
 	
-	@RequestMapping("/hello1")
+	@RequestMapping("/users")
 	public ModelAndView showMessage1(
 			@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
 		
@@ -49,11 +49,6 @@ public class HelloWorldController {
 		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
 		HelloWorld obj = (HelloWorld) context.getBean("helloWorld");
-		 
-//		List<Users> users = session.createCriteria(Users.class).list();
-		
-//		mv.addObject("nuovo", users.get(0).getName());
-//		mv.addObject("users", users);
 		
 		mv.addObject("message", obj.getMessage());
 		return mv;
@@ -76,6 +71,7 @@ public class HelloWorldController {
 		List<Users> usersFound = session.
 				createCriteria(Users.class).
 				add( Restrictions.like("name", "%"+startsWith+"%")).
+			    addOrder( Property.forName("name").asc() ).
 				list();
 		
 		// List to JSON conversion using JAVA
@@ -107,12 +103,16 @@ public class HelloWorldController {
 	public ModelAndView insert_users(
 			@RequestParam(value = "n_users", required = true, defaultValue = "") String n_users) {
     	try {
+	    	System.out.println("Fase 1");
 	    	cfg = new Configuration().configure().addAnnotatedClass(Users.class);
+	    	System.out.println("Fase 2");
 	    	sessionFactory = cfg.buildSessionFactory(new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build());
+	    	System.out.println("Fase 3");
 	    	session = sessionFactory.openSession();
-	    	System.out.println("Tutto ok1");
+	    	System.out.println("Fase 4");
     	} catch (Exception e) {
     		e.printStackTrace();
+	    	System.out.println("Fase ex");
     	}
 		ModelAndView mv = new ModelAndView("insert_users");
 		
