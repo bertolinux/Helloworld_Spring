@@ -4,18 +4,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head> 
-<spring:url value="/resources/jquery-3.1.0.min.js" var="jqueryJS" />
-<spring:url value="/Main/search_users" var="search_users" />
-<spring:url value="/Main/insert_users" var="insert_users" />
+<spring:url value="/resources/img/loading.gif" var="loadingGif" />
+<spring:url value="/resources/js/jquery-3.1.0.min.js" var="jqueryJS" />
+<spring:url value="/${controller_url}/search" var="search" />
+<spring:url value="/${controller_url}/insert" var="insert" />
 <script src="${jqueryJS}"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Spring 4 MVC -HelloWorld</title>
 </head>
 <script>
-	function searchUser(string) {
+	$( document ).ready(function() {
+	    $("#div_loadingGifSearch").hide();
+	    $("#div_loadingGifInsert").hide();
+	});
+	function searchItem(string) {
+		$("#div_loadingGifSearch").show();
 		$.ajax({
-		
-		    url : '${search_users}',
+		    url : '${search}',
 		    type : 'POST',
 		    data : {
 		        'search_string' : string
@@ -30,29 +35,34 @@
 			        var option = document.createElement("option");
 					option.text = data.usersFound[i].name;
 					selectUsersFound.add(option);
-		        }
+		        }		
+				$("#div_loadingGifSearch").hide();
 		    },
 		    error : function(request,error)
-		    {
+		    {		
+				$("#div_loadingGifSearch").hide();
 		        alert("Request: "+JSON.stringify(request));
 		    }
-		});			
+		});
 	}
 	
-	function insert_users(n_users) {
+	function insertItem(n_users) {
+		$("#div_loadingGifInsert").show();
 		$.ajax({
 		
-		    url : '${insert_users}',
+		    url : '${insert}',
 		    type : 'POST',
 		    data : {
 		        'n_users' : n_users
 		    },
 		    dataType:'html',
-		    success : function(data) {
+		    success : function(data) {		
+				$("#div_loadingGifInsert").hide();
 				alert(data)
 		    },
 		    error : function(request,error)
-		    {
+		    {	
+				$("#div_loadingGifInsert").hide();
 		        alert("Request: "+request);
 		    }
 		});		
@@ -67,7 +77,8 @@
 			<div id="left" style="position: absolute; left: 0px; width: 20%; height: 400px; background-color: #FFF0F0">
        				<form name="searchForm">
 					Search... <input type=text name="search">
-					<input type=button onclick="searchUser(this.form.search.value)" value=Search>
+					<input type=button onclick="searchItem(this.form.search.value)" value=Search>
+					<img src="${loadingGif}" width=20 id="div_loadingGifSearch" style="display: block">
 					</form> 
 					<br>
 					<div id="result">	
@@ -78,7 +89,9 @@
 				${message} <br>
 				<br>
 				<form>
-				New Elements: <input type=text name=n_users> <input type=button onclick="insert_users(this.form.n_users.value)" value=Insert>
+				New Elements: <input type=text name=n_users> <input type=button onclick="insertItem(this.form.n_users.value)" value=Insert>
+				<img src="${loadingGif}" width=20 id="div_loadingGifInsert" style="display: block">
+					
 				</form>
 				
 			</div>		

@@ -11,7 +11,13 @@ pageEncoding="ISO-8859-1"%>
 	<center>
 		<h2>Hello World</h2>
 		<h3>
-			<a href="hello?name=Eric">Click Here</a>
+			<a href="Users/">Users</a>
+		</h3>
+		<h3>
+			<a href="Products/">Products</a>
+		</h3>
+		<h3>
+			<a href="Sales/">Sales</a>
 		</h3>
 	</center>
 </body>

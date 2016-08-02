@@ -19,32 +19,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("Main")
-public class HelloWorldController {
+@RequestMapping(Constant.USERS_CONTROLLER_PATH)
+public class HelloWorldControllerUsers {
+	
 	String message = "Welcome to Spring MVC!";
     private Configuration cfg;
     private static SessionFactory sessionFactory;
     private Session session;
     
-    public HelloWorldController() {
+    public HelloWorldControllerUsers() {
 	
     }
-    
-	@RequestMapping("/hello")
-	public ModelAndView showMessage(
-			@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
-		ModelAndView mv = new ModelAndView("helloworld"); 
-		mv.addObject("message", message);   
-		mv.addObject("name", name);
-		return mv;
-	}
-	
-	@RequestMapping("/users")
+	 
+	@RequestMapping("/")
 	public ModelAndView showMessage1(
 			@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
 		
-		ModelAndView mv = new ModelAndView("helloworld");
+		ModelAndView mv = new ModelAndView("helloworld_users");
 		mv.addObject("name", name);
+		mv.addObject("controller_url", Constant.USERS_CONTROLLER_PATH);
 		
 		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
@@ -54,7 +47,7 @@ public class HelloWorldController {
 		return mv;
 	}	
 	
-	@RequestMapping("/search_users")
+	@RequestMapping("/search")
 	public ModelAndView search_users(
 			@RequestParam(value = "search_string", required = true, defaultValue = "") String startsWith) {
 
@@ -95,11 +88,12 @@ public class HelloWorldController {
 		]}*/
 		
 		session.close();
+		mv.addObject("controller_url", Constant.USERS_CONTROLLER_PATH);
 		mv.addObject("usersFoundJson", usersFoundJson.toString()); 
 		return mv;
 	}
 	
-	@RequestMapping("/insert_users")
+	@RequestMapping("/insert")
 	public ModelAndView insert_users(
 			@RequestParam(value = "n_users", required = true, defaultValue = "") String n_users) {
     	try {
@@ -116,7 +110,7 @@ public class HelloWorldController {
     	}
 		ModelAndView mv = new ModelAndView("insert_users");
 		
-		String return_insert_users;
+		String return_insert;
 		// Hibernate insert into users table
 		try {
 			Transaction transaction = session.beginTransaction();
@@ -126,18 +120,19 @@ public class HelloWorldController {
 				session.save(new Users("User " + random_string)); 
 			}
 			transaction.commit();
-            return_insert_users = new String("OK");
+            return_insert = new String("OK");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block 
 			e.printStackTrace();
-            return_insert_users = new String("KO");
+            return_insert = new String("KO");
 		} finally {
 			session.close();
 			
 		}
 		// End of Hibernate
 		
-		mv.addObject("return_insert_users", return_insert_users);
+		mv.addObject("return_insert", return_insert);
+		mv.addObject("controller_url", Constant.USERS_CONTROLLER_PATH);
 		return mv;
 	}		
 	
