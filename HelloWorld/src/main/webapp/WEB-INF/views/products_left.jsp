@@ -1,19 +1,8 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-
-<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
-<html>
-<head> 
 <spring:url value="/resources/img/loading.gif" var="loadingGif" />
 <spring:url value="/resources/js/jquery-3.1.0.min.js" var="jqueryJS" />
 <spring:url value="/${controller_url}/search" var="search" />
 <spring:url value="/${controller_url}/insert" var="insert" />
-<script src="${jqueryJS}"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Spring 4 MVC -HelloWorld</title>
-</head>
 <script>
 	$( document ).ready(function() {
 	    $("#div_loadingGifSearch").hide();
@@ -70,30 +59,13 @@
 		});		
 	}
 </script>
-<body>
-	<center>
-		<h2>Hello World</h2>
-	</center>
-		<div style="position: absolute; left: 0px; width: 100%; background-color: #FFF8F0">
-			<div id="left" style="position: absolute; left: 0px; width: 20%; height: 400px; background-color: #FFF0F0">
-       				<form name="searchForm">
-					Search... <input type=text name="search">
-					<input type=button onclick="searchItem(this.form.search.value)" value=Search>
-					<img src="${loadingGif}" width=20 id="div_loadingGifSearch" style="display: block">
-					</form> 
-					<br>
-					<div id="result">	
-						<select id="selectUsersFound"></select>				
-					</div>
-			</div>
-			<div id="center" style="position: absolute; left: 20%; width: 60%; height: 400px; background-color: #F1F0F0">
-				${message} <br>
-				<br>
-				<form>
-				New Elements: <input type=text name=n_users> <input type=button onclick="insertItem(this.form.n_users.value)" value=Insert>
-				<img src="${loadingGif}" width=20 id="div_loadingGifInsert" style="display: block">
-				</form>				
-			</div>		
-		</div>
-</body>
-</html>
+<form name="searchForm">
+	Search... <input type=text name="search">
+	<input type=button onclick="searchItem(this.form.search.value)" value=Search>
+	<img src="${loadingGif}" width=20 id="div_loadingGifSearch" style="display: block">
+</form> 
+products_left
+<br>
+<div id="result">	
+	<select id="selectUsersFound"></select>				
+</div>

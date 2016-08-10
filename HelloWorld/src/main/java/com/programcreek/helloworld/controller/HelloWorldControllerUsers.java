@@ -35,7 +35,7 @@ public class HelloWorldControllerUsers {
 	public ModelAndView showMessage1(
 			@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
 		
-		ModelAndView mv = new ModelAndView("helloworld_users");
+		ModelAndView mv = new ModelAndView("users");
 		mv.addObject("name", name);
 		mv.addObject("controller_url", Constant.USERS_CONTROLLER_PATH);
 		
@@ -44,6 +44,7 @@ public class HelloWorldControllerUsers {
 		HelloWorld obj = (HelloWorld) context.getBean("helloWorld");
 		
 		mv.addObject("message", obj.getMessage());
+		mv.addObject("title", "users");
 		return mv;
 	}	
 	

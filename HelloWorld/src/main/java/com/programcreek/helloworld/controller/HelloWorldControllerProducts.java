@@ -14,7 +14,10 @@ import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,14 +31,13 @@ public class HelloWorldControllerProducts {
     private Session session;
     
     public HelloWorldControllerProducts() {
-	
     }
 	 
 	@RequestMapping("/")
 	public ModelAndView showMessage1(
 			@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
 		
-		ModelAndView mv = new ModelAndView("helloworld_products");
+		ModelAndView mv = new ModelAndView("products");
 		mv.addObject("name", name);
 		mv.addObject("controller_url", Constant.PRODUCTS_CONTROLLER_PATH);
 		
@@ -44,6 +46,7 @@ public class HelloWorldControllerProducts {
 		HelloWorld obj = (HelloWorld) context.getBean("helloWorld");
 		
 		mv.addObject("message", obj.getMessage());
+		mv.addObject("title", "products");
 		return mv;
 	}	
 	
@@ -135,5 +138,19 @@ public class HelloWorldControllerProducts {
 		mv.addObject("controller_url", Constant.PRODUCTS_CONTROLLER_PATH);
 		return mv;
 	}		
+	
+	@RequestMapping("/a/{seconda}/{terza}/{quarta}")
+	public ModelAndView a_b_c_d(
+			@RequestParam(value = "n_users", required = true, defaultValue = "") String n_products,
+			@PathVariable String seconda,
+			@PathVariable String terza,
+			@PathVariable String quarta) {
+		
+		ModelAndView mv = new ModelAndView("abcd");
+		mv.addObject("seconda",seconda);
+		mv.addObject("terza",terza);
+		mv.addObject("quarta",quarta);
+		return mv;
+	}
 	
 }
