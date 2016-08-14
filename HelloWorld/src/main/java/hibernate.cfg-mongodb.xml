@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+ <session-factory name="db1">
+        <!-- Database connection settings -->
+        <property name="hibernate.dialect">org.hibernate.ogm.dialect.mongodb.MongoDBDialect</property>
+        <property name="hibernate.ogm.datastore.provider">mongodb</property>
+        <property name="hibernate.ogm.datastore.host">localhost</property>
+        <property name="hibernate.ogm.datastore.port">27017</property>
+        <property name="hibernate.ogm.datastore.database">helloworld</property>
+        <property name="hibernate.ogm.datastore.create_database">false</property>
+<!--         <property name="hibernate.ogm.mongodb.host">localhost</property> -->
+<!--         <property name="hibernate.ogm.mongodb.port">27017</property> -->
+<!--         <property name="hibernate.ogm.mongodb.database">helloworld</property> -->
+	</session-factory>
+</hibernate-configuration>
