@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class Users {
+public class Users implements searchRecord {
 	@Id	
 	@GeneratedValue
 	@Column(name = "id")

@@ -6,9 +6,9 @@
 
 ${message} 
 <br>
-users_right
+generic_right
 <br>
 <form>
-	New Elements: <input type=text name=n_users> <input type=button onclick="insertItem(this.form.n_users.value)" value=Insert>
+	New Elements: <input type=text name=n> <input type=button onclick="insertItem(this.form.n.value)" value=Insert>
 	<img src="${loadingGif}" width=20 id="div_loadingGifInsert" style="display: block">
 </form>			

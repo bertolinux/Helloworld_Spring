@@ -9,25 +9,21 @@
 	    $("#div_loadingGifSearch").hide();
 	    $("#div_loadingGifInsert").hide();
 	});
-	function searchItem(string) {
+	function searchItem(starts_with) {
 		$("#div_loadingGifSearch").show();
 		$.ajax({
 		    url : '${search}',
 		    type : 'POST',
 		    data : {
-		        'search_string' : string
+		        'starts_with' : starts_with
 		    },
 		    dataType:'json',
 		    success : function(data) {
-		    	var selectUsersFound = document.getElementById("selectUsersFound");  
-		    	selectUsersFound.length = 0;            
-		        for (i=0; i<data.usersFound.length;i++) {
-		        	if (data.usersFound[i].name == null)
-		        		continue;
-			        var option = document.createElement("option");
-					option.text = data.usersFound[i].name;
-					selectUsersFound.add(option);
-		        }		
+		    	var sel = $("#items");
+		    	sel.empty(); 	
+		    	$.each(data.items, function() {
+		    	    sel.append(new Option(this.name, this.name));
+		    	});
 				$("#div_loadingGifSearch").hide();
 		    },
 		    error : function(request,error)
@@ -38,14 +34,14 @@
 		});
 	}
 	
-	function insertItem(n_users) {
+	function insertItem(n) {
 		$("#div_loadingGifInsert").show();
 		$.ajax({
 		
 		    url : '${insert}',
 		    type : 'POST',
 		    data : {
-		        'n_users' : n_users
+		        'n' : n
 		    },
 		    dataType:'html',
 		    success : function(data) {		
@@ -66,8 +62,8 @@
 	<input type=button onclick="searchItem(this.form.search.value)" value=Search>
 	<img src="${loadingGif}" width=20 id="div_loadingGifSearch" style="display: block">
 </form> 
-users_left
+generic_left
 <br>
 <div id="result">	
-	<select id="selectUsersFound"></select>				
+	<select id="items"></select>				
 </div>

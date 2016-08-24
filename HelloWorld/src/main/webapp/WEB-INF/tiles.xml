@@ -5,30 +5,21 @@
 	<definition name="horizontal-2.common" template="/WEB-INF/layout/main.jsp">
   		<put-attribute name="center">
 			<definition name="horizontal-2.common.center" template="/WEB-INF/layout/horizonal-2.jsp">
-<!--   				<put-attribute name="left" value="/WEB-INF/views/null.jsp" /> -->
+<!--   				<put-attribute name="left" value="/WEB-INF/views/generic_left.jsp" /> -->
 <!--   				<put-attribute name="right" value="/WEB-INF/views/null.jsp" /> -->
 	  		</definition>
     	</put-attribute>
 	</definition>
 	
 	<definition name="products" extends="horizontal-2.common">
-		<put-attribute name="left" value="/WEB-INF/views/products_left.jsp" cascade="true"/>
-		<put-attribute name="right" value="/WEB-INF/views/products_right.jsp" cascade="true"/>
+		<put-attribute name="left" value="/WEB-INF/views/generic_left.jsp" cascade="true" />
+		<put-attribute name="right" value="/WEB-INF/views/generic_right.jsp" cascade="true"/>
 	</definition>	
 
 	<definition name="users" extends="horizontal-2.common">
-		<put-attribute name="left" value="/WEB-INF/views/users_left.jsp" cascade="true"/>
-		<put-attribute name="right" value="/WEB-INF/views/users_right.jsp" cascade="true"/>
+		<put-attribute name="left" value="/WEB-INF/views/generic_left.jsp" cascade="true" />
+		<put-attribute name="right" value="/WEB-INF/views/generic_right.jsp" cascade="true"/>
 	</definition>
-	
-<!-- 	<definition name="users" template="/WEB-INF/layout/main.jsp"> -->
-<!--   		<put-attribute name="center"> -->
-<!-- 			<definition name="users.center" template="/WEB-INF/layout/horizonal-2.jsp"> -->
-<!--   				<put-attribute name="left" value="/WEB-INF/views/users_left.jsp" /> -->
-<!--   				<put-attribute name="right" value="/WEB-INF/views/users_right.jsp" /> -->
-<!-- 	  		</definition> -->
-<!--     	</put-attribute> -->
-<!-- 	</definition> -->
   
 	<!--   AJAX USERS -->
 	<definition name="insert_users" template="/WEB-INF/views/insert_users.jsp"></definition>
