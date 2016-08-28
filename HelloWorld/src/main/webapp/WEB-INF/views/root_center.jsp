@@ -9,7 +9,6 @@ pageEncoding="ISO-8859-1"%>
 </head>
 <body>
 	<center>
-		<h2>Hello World</h2>
 		<h3>
 			<a href="Users/">Users</a>
 		</h3>
