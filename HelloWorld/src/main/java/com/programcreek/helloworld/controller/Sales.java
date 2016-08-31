@@ -1,5 +1,7 @@
 package com.programcreek.helloworld.controller;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,16 +15,15 @@ public class Sales {
 	@GeneratedValue
 	@Column(name = "id")
     private int id;
-	@Column(name = "user")
-	private String user;
-	@Column(name = "product")
-	private String product;
+	@Column(name = "iduser")
+    private int iduser;
+	@Column(name = "idproduct")
+    private int idproduct;
+	@Column(name = "date")
+    private Timestamp date;
+	@Column(name = "value")
+    private String value;
 	
-	public Sales(String user, String product) {
-		this.user = user;
-		this.product = product;
-	}
-
 	public Sales() {
 	}
 
@@ -34,19 +35,35 @@ public class Sales {
 		this.id = id;
 	}
 
-	public String getUser() {
-		return user;
+	public int getIduser() {
+		return iduser;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setIduser(int iduser) {
+		this.iduser = iduser;
 	}
 
-	public String getProduct() {
-		return product;
+	public int getIdproduct() {
+		return idproduct;
 	}
 
-	public void setProduct(String product) {
-		this.product = product;
+	public void setIdproduct(int idproduct) {
+		this.idproduct = idproduct;
+	}
+
+	public Timestamp getDate() {
+		return date;
+	}
+
+	public void setDate(Timestamp date) {
+		this.date = date;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }
