@@ -1,1 +1,0 @@
-Remember Project -> Clean to reset URL MVC Mapping PATH

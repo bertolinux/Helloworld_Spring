@@ -1,0 +1,65 @@
+:root {
+    --main-background: #fffff;
+    --line-background: lightgray;
+    
+    --left-background: #C0EDff;
+    --right-background: #C0EAff;
+}
+
+h2, h3, hr {
+	margin: 0px;
+	padding: 10px;
+	text-align: center;
+}
+
+hr {
+	padding: 0px;
+	height: 1px;
+	color:  var(--main-background);
+	background-color: var(--main-background);
+}
+
+#header {
+	background-color: var(--main-background); 
+	height: 10%; 
+	align_content: center;	
+}
+
+#center {
+	background-color: var(--main-background);
+	text-align: center;
+	height: 80%;
+}
+
+#footer {
+	background-color: var(--main-background);
+	height: 10%; 
+	text-align:center;
+	vertical-align: text-bottom;
+}
+
+.left {
+	position: relative;
+    background: var(--left-background);
+    font-size: 16px;
+    margin-left: 1px;
+    margin-right: 1px;
+    display: block;
+    float: left;
+    width: 48%;
+    height: 30%;
+}
+
+.right {
+	position: relative;
+    background: var(--right-background);
+    font-size: 16px;
+    margin-left: 1px;
+    margin-right: 1px;
+    display: block;
+    width: 48%;
+    height: 30%;
+    text-align: center;
+    border-left: 5px;	
+    float: right;
+}

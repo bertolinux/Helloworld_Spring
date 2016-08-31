@@ -1,35 +1,16 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<spring:url value="/${controller_url}/search" var="searchURL" />
+<spring:url value="/${controller_url}/insert" var="insertURL" />
+<spring:url value="/resources/js/search_insert.js" var="searchInsert" />
 
-<style>
-.left {
-	position: relative;
-    background: #C0EDff;
-    font-size: 16px;
-    margin-left: 2px;
-    margin-right: 2px;
-    display: block;
-    float: left;
-    width: 48%;
-    height: 30%;
-    text-align: center;
-}
-
-.right {
-	position: relative;
-    background: #C0EAff;
-    font-size: 16px;
-    margin-left: 2px;
-    margin-right: 2px;
-    display: block;
-    float: left;
-    width: 48%;
-    height: 30%;
-    text-align: center;
-    border-left: 5px
-}
-</style>
+<script>
+	// Bind Spring variables with Javascript variables
+	var insertURL="${insertURL}";
+	var searchURL="${searchURL}";
+	var selectAttribute="${selectAttribute}";
+</script>
+<script src="${searchInsert}"></script>
 
 <div class="left">
 	<tiles:insertAttribute name="left"/>

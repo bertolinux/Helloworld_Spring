@@ -25,6 +25,11 @@
 		<put-attribute name="right" value="/WEB-INF/views/generic_right.jsp" cascade="true"/>
 	</definition>
   
+	<definition name="sales" extends="horizontal-2.common">
+		<put-attribute name="left" value="/WEB-INF/views/generic_left.jsp" cascade="true" />
+		<put-attribute name="right" value="/WEB-INF/views/generic_right.jsp" cascade="true"/>
+	</definition>
+	
 	<!--   AJAX USERS -->
 	<definition name="insert_users" template="/WEB-INF/views/insert_users.jsp"></definition>
 	<definition name="search_users" template="/WEB-INF/views/search_users.jsp"></definition>
