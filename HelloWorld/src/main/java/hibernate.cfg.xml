@@ -4,11 +4,17 @@
 <hibernate-configuration>
  <session-factory name="db">
   <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+  
   <property name="hibernate.connection.url">jdbc:mysql://localhost/helloworld</property>
   <property name="hibernate.default_schema">helloworld</property>
   <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
   <property name="hibernate.show_sql">true</property>
   <property name="hibernate.connection.username">berto</property>
   <property name="hibernate.connection.password">roberto2016</property>
+  
+  <mapping class="com.programcreek.helloworld.controller.Users"/>
+  <mapping class="com.programcreek.helloworld.controller.Products"/>
+  <mapping class="com.programcreek.helloworld.controller.Sales"/>
+  
  </session-factory>
 </hibernate-configuration>

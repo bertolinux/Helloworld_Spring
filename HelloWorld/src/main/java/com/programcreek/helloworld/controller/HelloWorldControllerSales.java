@@ -1,6 +1,9 @@
 package com.programcreek.helloworld.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
@@ -24,34 +27,54 @@ public class HelloWorldControllerSales extends HelloWorldControllerBase {
 		mv.addObject("name", title);
 		mv.addObject("controller_url", path);
 		mv.addObject("title", title);
-		mv.addObject("selectAttribute", "value");
 		return mv;
     }
     
 	@RequestMapping(value = "/search", produces = "application/json")
-	public @ResponseBody String search(
+	public @ResponseBody List<HashMap<String, String>> search(
 			@RequestParam(value = "starts_with", required = true, defaultValue = "") String startsWith
 	) {
+
 		@SuppressWarnings("unchecked")
-		List<Object> items = session.
+		List<Sales> items = session.
 			createCriteria(Sales.class).	
 			add( Restrictions.like("value", "%"+startsWith+"%")).
 		    addOrder( Property.forName("value").asc() ).
 			list();
-
-		return hibernateToJsonString(items);
-	}    
+		
+		List<HashMap<String, String>> m = new ArrayList<HashMap<String, String>>();
+		for (int i=0; i < items.size(); i++) {
+			String key = new Integer(items.get(i).getId()).toString();
+			String value = 
+					items.get(i).getValue() + " " +
+					items.get(i).getUser().getName() + " " +
+					items.get(i).getProduct().getName() + " " +  
+					items.get(i).getDate();
+			HashMap <String,String> item = new HashMap<String,String>();
+			item.put("id", key);
+			item.put("value", value);
+			m.add(item);
+		}
+		return m;
+	};    
 	
 	@RequestMapping("/insert")
 	public @ResponseBody String insert(@RequestParam(value = "n", required = true, defaultValue = "") String n) {
 		
 		String return_insert;
+		Transaction transaction = session.beginTransaction();
 		try {
-			Transaction transaction = session.beginTransaction();
 			for (int i = 0; i < new Integer(n); i++) {
 				Sales sale = new Sales();
-				sale.setIduser(randomInt(n));				
-				sale.setIdproduct(randomInt(n));				
+				
+				Users u = new Users();
+				u.setId(1388487);
+				sale.setUser(u);
+				
+				Products p = new Products();
+				p.setId(2016);
+				sale.setProduct(p);
+				
 				sale.setValue(randomString(n));				
 				session.save(sale);  
 			}
@@ -59,7 +82,8 @@ public class HelloWorldControllerSales extends HelloWorldControllerBase {
             return_insert = new String("OK");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block 
-			e.printStackTrace();
+			transaction.rollback();
+            e.printStackTrace();
             return_insert = new String("KO");
 		}		
 		return return_insert;

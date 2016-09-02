@@ -1,19 +1,22 @@
 package com.programcreek.helloworld.controller;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "users")
-public class Users {
+public class Users  implements Serializable {
 	@Id	
 	@GeneratedValue
 	@Column(name = "id")
     private int id;
-	@Column(name = "name")
+	@Column(name = "name") 
 	private String name;
 	
 	public Users(int id, String name) {

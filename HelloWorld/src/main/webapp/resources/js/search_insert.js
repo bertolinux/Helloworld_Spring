@@ -15,8 +15,8 @@ function searchItem(starts_with) {
 	    success : function(data) {
 	    	var sel = $("#items");
 	    	sel.empty(); 	
-	    	$.each(data.items, function() {
-	    	    sel.append(new Option(this[selectAttribute], this[selectAttribute]));
+	    	$.each(data, function() {
+	    	    sel.append(new Option(this.value, this.id));
 	    	});
 			$("#div_loadingGifSearch").hide();
 	    },

@@ -1,5 +1,7 @@
 package com.programcreek.helloworld.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Property;
@@ -24,30 +26,41 @@ public class HelloWorldControllerUsers extends HelloWorldControllerBase {
 		mv.addObject("name", title);
 		mv.addObject("controller_url", path);
 		mv.addObject("title", title);
-		mv.addObject("selectAttribute", "name");
 		return mv;
     }
     
 	@RequestMapping(value = "/search", produces = "application/json")
-	public @ResponseBody String search(
+	public @ResponseBody List<HashMap<String, String>> search(
 			@RequestParam(value = "starts_with", required = true, defaultValue = "") String startsWith
 	) {
 		@SuppressWarnings("unchecked")
-		List<Object> items = session.
+		List<Users> items = session.
 			createCriteria(Users.class).	
 			add( Restrictions.like("name", "%"+startsWith+"%")).
 		    addOrder( Property.forName("name").asc() ).
 			list();
-
-		return hibernateToJsonString(items);
+		
+		List<HashMap<String, String>> listMap = new ArrayList<HashMap<String, String>>();
+		for (int i=0; i < items.size(); i++) {
+			
+			String key = new Integer(items.get(i).getId()).toString();
+			String value = items.get(i).getName();
+			
+			HashMap <String,String> item = new HashMap<String,String>();
+			item.put("id", key);
+			item.put("value", value);
+			
+			listMap.add(item);
+		}
+		return listMap;
 	}    
 	
 	@RequestMapping("/insert")
 	public @ResponseBody String insert(@RequestParam(value = "n", required = true, defaultValue = "") String n) {
 		
 		String return_insert;
+		Transaction transaction = session.beginTransaction();;
 		try {
-			Transaction transaction = session.beginTransaction();
 			for (int i = 0; i < new Integer(n); i++) {
 				Users user = new Users();				
 				user.setName("User " + randomString(n));				
@@ -57,6 +70,7 @@ public class HelloWorldControllerUsers extends HelloWorldControllerBase {
             return_insert = new String("OK");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block 
+			transaction.rollback();
 			e.printStackTrace();
             return_insert = new String("KO");
 		}		

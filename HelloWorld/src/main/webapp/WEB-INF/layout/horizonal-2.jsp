@@ -8,7 +8,6 @@
 	// Bind Spring variables with Javascript variables
 	var insertURL="${insertURL}";
 	var searchURL="${searchURL}";
-	var selectAttribute="${selectAttribute}";
 </script>
 <script src="${searchInsert}"></script>
 
