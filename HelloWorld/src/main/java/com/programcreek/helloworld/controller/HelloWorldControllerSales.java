@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.hibernate.Cache;
+import org.hibernate.Criteria;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Controller;
@@ -27,18 +31,61 @@ public class HelloWorldControllerSales extends HelloWorldControllerBase {
 		mv.addObject("name", title);
 		mv.addObject("controller_url", path);
 		mv.addObject("title", title);
+		
+		@SuppressWarnings("unchecked")
+		List<Users> items = session.
+			createCriteria(Users.class).	
+			addOrder( Property.forName("name").asc() ).
+			list();
+		
+		List<HashMap<String, String>> users = new ArrayList<HashMap<String, String>>();
+		for (int i=0; i < items.size(); i++) {
+			
+			String key = new Integer(items.get(i).getId()).toString();
+			String value = items.get(i).getName();
+			
+			HashMap <String,String> item = new HashMap<String,String>();
+			item.put("id", key);
+			item.put("value", value);
+			
+			users.add(item);
+		}		
+		mv.addObject("users", users);
+		
+		@SuppressWarnings("unchecked")
+		List<Products> items1 = session.
+			createCriteria(Products.class).	
+			addOrder( Property.forName("name").asc() ).
+			list();
+		
+		List<HashMap<String, String>> products = new ArrayList<HashMap<String, String>>();
+		for (int i=0; i < items1.size(); i++) {
+			String key = new Integer(items1.get(i).getId()).toString();
+			String value = items1.get(i).getName();
+			HashMap <String,String> item = new HashMap<String,String>();
+			item.put("id", key);
+			item.put("value", value);
+			products.add(item);
+		}		
+		mv.addObject("products", products);		
+		
 		return mv;
     }
     
 	@RequestMapping(value = "/search", produces = "application/json")
-	public @ResponseBody List<HashMap<String, String>> search(
-			@RequestParam(value = "starts_with", required = true, defaultValue = "") String startsWith
-	) {
+	public @ResponseBody List<HashMap<String, String>> search(			
+			@RequestParam(value = "user", required = true, defaultValue = "") int user, 
+			@RequestParam(value = "product", required = true, defaultValue = "") int product, 
+			@RequestParam(value = "value", required = true, defaultValue = "") String Value) {
 
+		Criteria c = session.createCriteria(Sales.class);
+		if (user != 0)
+			c = c.add(Restrictions.eq("user.id", user));
+		if (product != 0)
+			c = c.add(Restrictions.eq("product.id", product));
+		
 		@SuppressWarnings("unchecked")
-		List<Sales> items = session.
-			createCriteria(Sales.class).	
-			add( Restrictions.like("value", "%"+startsWith+"%")).
+		List<Sales> items = c.
 		    addOrder( Property.forName("value").asc() ).
 			list();
 		
@@ -79,6 +126,11 @@ public class HelloWorldControllerSales extends HelloWorldControllerBase {
 				session.save(sale);  
 			}
 			transaction.commit();
+			session.clear();
+			Cache cache = session.getSessionFactory().getCache();
+			if (cache != null) {
+			    cache.evictAllRegions(); // Evict data from all query regions.
+			}
             return_insert = new String("OK");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block 
@@ -88,4 +140,37 @@ public class HelloWorldControllerSales extends HelloWorldControllerBase {
 		}		
 		return return_insert;
     }	    
+	
+	@RequestMapping("/insertNew")
+	public @ResponseBody String insertNew(
+			@RequestParam(value = "user", required = true, defaultValue = "") int user, 
+			@RequestParam(value = "product", required = true, defaultValue = "") int product, 
+			@RequestParam(value = "value", required = true, defaultValue = "") String value)
+	{
+		
+		String return_insert;
+		Transaction transaction = session.beginTransaction();
+		try {
+			Sales sale = new Sales();
+			
+			Users u = new Users();
+			u.setId(user);
+			sale.setUser(u);
+			
+			Products p = new Products();
+			p.setId(product);
+			sale.setProduct(p);
+			
+			sale.setValue(value);				
+			session.save(sale);  
+			transaction.commit();
+            return_insert = new String("OK");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block 
+			transaction.rollback();
+            e.printStackTrace();
+            return_insert = new String("KO");
+		}		
+		return return_insert;
+    }	 	
 }

@@ -30,13 +30,14 @@ public class HelloWorldControllerUsers extends HelloWorldControllerBase {
     }
     
 	@RequestMapping(value = "/search", produces = "application/json")
-	public @ResponseBody List<HashMap<String, String>> search(
-			@RequestParam(value = "starts_with", required = true, defaultValue = "") String startsWith
+	public @ResponseBody List<HashMap<String, String>> actions(
+			@RequestParam(value = "string", required = true, defaultValue = "") String string
 	) {
+		
 		@SuppressWarnings("unchecked")
 		List<Users> items = session.
 			createCriteria(Users.class).	
-			add( Restrictions.like("name", "%"+startsWith+"%")).
+			add( Restrictions.like("name", "%"+string+"%")).
 		    addOrder( Property.forName("name").asc() ).
 			list();
 		
@@ -53,19 +54,17 @@ public class HelloWorldControllerUsers extends HelloWorldControllerBase {
 			listMap.add(item);
 		}
 		return listMap;
-	}    
+	}  	
 	
-	@RequestMapping("/insert")
-	public @ResponseBody String insert(@RequestParam(value = "n", required = true, defaultValue = "") String n) {
+	@RequestMapping(value = "/insert", produces = "application/json")
+	public @ResponseBody String insertNew(@RequestParam(value = "string", required = true, defaultValue = "") String string) {
 		
 		String return_insert;
 		Transaction transaction = session.beginTransaction();;
 		try {
-			for (int i = 0; i < new Integer(n); i++) {
-				Users user = new Users();				
-				user.setName("User " + randomString(n));				
-				session.save(user);  
-			}
+			Users user = new Users();				
+			user.setName(string);				
+			session.save(user);  
 			transaction.commit();
             return_insert = new String("OK");
 		} catch (Exception e) {
@@ -75,5 +74,5 @@ public class HelloWorldControllerUsers extends HelloWorldControllerBase {
             return_insert = new String("KO");
 		}		
 		return return_insert;
-	}	
+	}		
 }

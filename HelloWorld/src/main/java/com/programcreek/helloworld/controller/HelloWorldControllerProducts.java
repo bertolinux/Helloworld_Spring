@@ -60,7 +60,7 @@ public class HelloWorldControllerProducts extends HelloWorldControllerBase {
 		try {
 			for (int i = 0; i < new Integer(n); i++) {
 				Products product = new Products();
-				product.setName("Name " + randomString(n));				
+				product.setName("Product " + randomString(n));				
 				session.save(product);  
 			}
 			transaction.commit();
@@ -73,4 +73,24 @@ public class HelloWorldControllerProducts extends HelloWorldControllerBase {
 		}		
 		return return_insert;
 	}	
+	
+	@RequestMapping("/insertNew")
+	public @ResponseBody String insertNew(@RequestParam(value = "name", required = true, defaultValue = "") String name) {
+		
+		String return_insert;
+		Transaction transaction = session.beginTransaction();
+		try {
+			Products product = new Products();
+			product.setName(name);				
+			session.save(product);  
+			transaction.commit();
+            return_insert = new String("OK");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block 
+			transaction.rollback();
+            e.printStackTrace();
+            return_insert = new String("KO");
+		}		
+		return return_insert;
+	}		
 }

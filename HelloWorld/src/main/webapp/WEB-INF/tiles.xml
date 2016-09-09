@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
-<tiles-definitions>
+<tiles-definitions>	
+	<definition name="root" template="/WEB-INF/layout/main.jsp">
+		<put-attribute name="center" value="/WEB-INF/views/root_center.jsp"/>
+	</definition>
+	
 	<definition name="horizontal-2.common" template="/WEB-INF/layout/main.jsp">
   		<put-attribute name="center">
 			<definition name="horizontal-2.common.center" template="/WEB-INF/layout/horizonal-2.jsp">
@@ -11,22 +15,39 @@
     	</put-attribute>
 	</definition>
 	
-	<definition name="root" template="/WEB-INF/layout/main.jsp">
-		<put-attribute name="center" value="/WEB-INF/views/root_center.jsp"/>
+	<definition name="horizontal-3.common" template="/WEB-INF/layout/main.jsp">
+  		<put-attribute name="center">
+			<definition name="horizontal-3.common.center" template="/WEB-INF/layout/horizonal-3.jsp">
+<!--   				<put-attribute name="left" value="/WEB-INF/views/generic_left.jsp" /> -->
+<!--   				<put-attribute name="right" value="/WEB-INF/views/null.jsp" /> -->
+	  		</definition>
+    	</put-attribute>
 	</definition>
-		
-	<definition name="products" extends="horizontal-2.common">
+	
+	<definition name="vertical-2.common" template="/WEB-INF/layout/main.jsp">
+  		<put-attribute name="center">
+			<definition name="vertical-2.common.center" template="/WEB-INF/layout/vertical-2.jsp">
+<!--   				<put-attribute name="left" value="/WEB-INF/views/generic_up.jsp" /> -->
+<!--   				<put-attribute name="right" value="/WEB-INF/views/generic_down.jsp" /> -->
+	  		</definition>
+    	</put-attribute>
+	</definition>	
+	
+	<definition name="users" extends="vertical-2.common">
+		<put-attribute name="up" value="/WEB-INF/views/generic_up.jsp" cascade="true" />
+		<put-attribute name="down" value="/WEB-INF/views/generic_down.jsp" cascade="true"/>
+	</definition>
+	
+	<definition name="products" extends="horizontal-3.common">
 		<put-attribute name="left" value="/WEB-INF/views/generic_left.jsp" cascade="true" />
+		<put-attribute name="middle" value="/WEB-INF/views/generic_middle.jsp" cascade="true"/>
 		<put-attribute name="right" value="/WEB-INF/views/generic_right.jsp" cascade="true"/>
 	</definition>	
 
-	<definition name="users" extends="horizontal-2.common">
-		<put-attribute name="left" value="/WEB-INF/views/generic_left.jsp" cascade="true" />
-		<put-attribute name="right" value="/WEB-INF/views/generic_right.jsp" cascade="true"/>
-	</definition>
   
-	<definition name="sales" extends="horizontal-2.common">
-		<put-attribute name="left" value="/WEB-INF/views/generic_left.jsp" cascade="true" />
+	<definition name="sales" extends="horizontal-3.common">
+		<put-attribute name="left" value="/WEB-INF/views/sales_left.jsp" cascade="true" />
+		<put-attribute name="middle" value="/WEB-INF/views/sales_middle.jsp" cascade="true"/>
 		<put-attribute name="right" value="/WEB-INF/views/generic_right.jsp" cascade="true"/>
 	</definition>
 	
