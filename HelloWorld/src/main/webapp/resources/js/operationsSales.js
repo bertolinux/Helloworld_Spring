@@ -4,11 +4,11 @@ $( document ).ready(function() {
     $("#div_loadingGifInsertNew").hide();
 });
 
-function request(op,string) {
+function request(op,user, product, string) {
 	$("#div_loadingGifSearch").show();
 	switch(op) {
 	case "search":
-		search(string);
+		search(user, product, string);
 		break;
 	case "save":
 		save(Ext.encode(Ext.pluck(panel.getStore().data.items, 'data')));
@@ -19,13 +19,15 @@ function request(op,string) {
 	}
 }
 
-function search(string) {
+function search(user, product, string) {
 	$.ajax({
 	    url : searchURL,
 	    async: false,
 	    type : 'POST',
 	    data : {
-	        'string' : string
+	        'user'   : user,
+	        'product': product,
+	    	'string' : string	        
 	    },
 	    dataType:'json',
 	    success : function(data) {

@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "sales")
@@ -36,6 +39,12 @@ public class Sales  implements Serializable {
 	public Sales() {
 	}
 
+	public Sales(Users user, Products product, String value) {
+		this.user = user;
+		this.product = product;
+		this.value = value;
+	}
+	
 	public int getId() {
 		return id;
 	}

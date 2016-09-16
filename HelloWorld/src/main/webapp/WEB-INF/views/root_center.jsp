@@ -6,14 +6,15 @@
 <title>Spring 4 MVC - HelloWorld Index Page</title>
 </head>
 <body>
-	<h3>
-		<a href="Users/">Users</a>
-	</h3>
-	<h3>
-		<a href="Products/">Products</a>
-	</h3>
-	<h3>
-		<a href="Sales/">Sales</a>
-	</h3>
+	<br>
+	<form method="get" action="Users/">
+	    <button type="submit" class="buttons">Users</button>
+	</form>	
+	<form method="get" action="Products/">
+	    <button type="submit" class="buttons">Products</button>
+	</form>	
+	<form method="get" action="Sales/">
+	    <button type="submit" class="buttons">Sales</button>
+	</form>	
 </body>
 </html>

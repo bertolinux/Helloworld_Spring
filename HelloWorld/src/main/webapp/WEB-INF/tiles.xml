@@ -6,56 +6,18 @@
 		<put-attribute name="center" value="/WEB-INF/views/root_center.jsp"/>
 	</definition>
 	
-	<definition name="horizontal-2.common" template="/WEB-INF/layout/main.jsp">
-  		<put-attribute name="center">
-			<definition name="horizontal-2.common.center" template="/WEB-INF/layout/horizonal-2.jsp">
-<!--   				<put-attribute name="left" value="/WEB-INF/views/generic_left.jsp" /> -->
-<!--   				<put-attribute name="right" value="/WEB-INF/views/null.jsp" /> -->
-	  		</definition>
-    	</put-attribute>
-	</definition>
-	
-	<definition name="horizontal-3.common" template="/WEB-INF/layout/main.jsp">
-  		<put-attribute name="center">
-			<definition name="horizontal-3.common.center" template="/WEB-INF/layout/horizonal-3.jsp">
-<!--   				<put-attribute name="left" value="/WEB-INF/views/generic_left.jsp" /> -->
-<!--   				<put-attribute name="right" value="/WEB-INF/views/null.jsp" /> -->
-	  		</definition>
-    	</put-attribute>
-	</definition>
-	
-	<definition name="vertical-2.common" template="/WEB-INF/layout/main.jsp">
-  		<put-attribute name="center">
-			<definition name="vertical-2.common.center" template="/WEB-INF/layout/vertical-2.jsp">
-<!--   				<put-attribute name="left" value="/WEB-INF/views/generic_up.jsp" /> -->
-<!--   				<put-attribute name="right" value="/WEB-INF/views/generic_down.jsp" /> -->
-	  		</definition>
-    	</put-attribute>
+	<definition name="singlePage" template="/WEB-INF/layout/main.jsp">
 	</definition>	
 	
-	<definition name="users" extends="vertical-2.common">
-		<put-attribute name="up" value="/WEB-INF/views/generic_up.jsp" cascade="true" />
-		<put-attribute name="down" value="/WEB-INF/views/generic_down.jsp" cascade="true"/>
-	</definition>
-	
-	<definition name="products" extends="horizontal-3.common">
-		<put-attribute name="left" value="/WEB-INF/views/generic_left.jsp" cascade="true" />
-		<put-attribute name="middle" value="/WEB-INF/views/generic_middle.jsp" cascade="true"/>
-		<put-attribute name="right" value="/WEB-INF/views/generic_right.jsp" cascade="true"/>
+	<definition name="users" extends="singlePage">
+		<put-attribute name="center" value="/WEB-INF/views/generic_center.jsp" cascade="true" />
 	</definition>	
-
-  
-	<definition name="sales" extends="horizontal-3.common">
-		<put-attribute name="left" value="/WEB-INF/views/sales_left.jsp" cascade="true" />
-		<put-attribute name="middle" value="/WEB-INF/views/sales_middle.jsp" cascade="true"/>
-		<put-attribute name="right" value="/WEB-INF/views/generic_right.jsp" cascade="true"/>
-	</definition>
 	
-	<!--   AJAX USERS -->
-	<definition name="insert_users" template="/WEB-INF/views/insert_users.jsp"></definition>
-	<definition name="search_users" template="/WEB-INF/views/search_users.jsp"></definition>
-
-	<!--   AJAX PRODUCTS   -->
-	<definition name="insert_products" template="/WEB-INF/views/insert_products.jsp"></definition>
-	<definition name="search_products" template="/WEB-INF/views/search_products.jsp"></definition>
+	<definition name="products" extends="singlePage">
+		<put-attribute name="center" value="/WEB-INF/views/generic_center.jsp" cascade="true" />
+	</definition>	
+		
+	<definition name="sales" extends="singlePage">
+		<put-attribute name="center" value="/WEB-INF/views/sales_center.jsp" cascade="true" />
+	</definition>	
 </tiles-definitions>

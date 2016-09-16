@@ -6,6 +6,8 @@ import java.util.List;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +21,16 @@ public class HelloWorldControllerProducts extends HelloWorldControllerBase {
     public HelloWorldControllerProducts() {
     	super(Products.class, "products", Constant.PRODUCTS_CONTROLLER_PATH, "products");
     }
+    
+    public List<Products> getList(String string) {
+		@SuppressWarnings("unchecked")
+		List<Products> items = session.
+			createCriteria(Products.class).	
+			add( Restrictions.like("name", "%"+string+"%")).
+		    addOrder( Property.forName("name").asc() ).
+			list();
+		return items;
+    }    
 
     @RequestMapping("/")
     public ModelAndView root() {
@@ -30,37 +42,44 @@ public class HelloWorldControllerProducts extends HelloWorldControllerBase {
     }
     
 	@RequestMapping(value = "/search", produces = "application/json")
-	public @ResponseBody List<HashMap<String, String>> search(
-			@RequestParam(value = "starts_with", required = true, defaultValue = "") String startsWith
+	public @ResponseBody List<HashMap<String, String>> actions(
+			@RequestParam(value = "string", required = true, defaultValue = "") String string
 	) {
-		@SuppressWarnings("unchecked")
-		List<Products> items = session.
-			createCriteria(Products.class).	
-			add( Restrictions.like("name", "%"+startsWith+"%")).
-		    addOrder( Property.forName("name").asc() ).
-			list();
 		
-		List<HashMap<String, String>> m = new ArrayList<HashMap<String, String>>();
+		List<Products> items = this.getList(string);
+		List<HashMap<String, String>> listMap = new ArrayList<HashMap<String, String>>();
 		for (int i=0; i < items.size(); i++) {
+			
 			String key = new Integer(items.get(i).getId()).toString();
 			String value = items.get(i).getName();
+			
 			HashMap <String,String> item = new HashMap<String,String>();
 			item.put("id", key);
-			item.put("value", value);
-			m.add(item);
+			item.put("name", value);
+			
+			listMap.add(item);
 		}
-		return m;
+		return listMap;
 	}    
 	
-	@RequestMapping("/insert")
-	public @ResponseBody String insert(@RequestParam(value = "n", required = true, defaultValue = "") String n) {
+	@RequestMapping(value = "/save", produces = "application/json")
+	public @ResponseBody String save(@RequestParam(value = "string", required = true, defaultValue = "") String string) {
 		
 		String return_insert;
 		Transaction transaction = session.beginTransaction();
 		try {
-			for (int i = 0; i < new Integer(n); i++) {
-				Products product = new Products();
-				product.setName("Product " + randomString(n));				
+			JSONArray data = new JSONArray(string); 
+			System.out.println(data.length());
+			for (int i=0; i < data.length(); i++) {
+				JSONObject obj = (JSONObject) data.get(i);
+				Products product = null;
+				try {
+					product = (Products) session.get(Products.class,new Integer(obj.getString("id")));
+					product.setName(obj.getString("name"));
+				} catch(Exception e) {
+					product = new Products(obj.getString("name"));
+				} 
+									
 				session.save(product);  
 			}
 			transaction.commit();
@@ -68,29 +87,32 @@ public class HelloWorldControllerProducts extends HelloWorldControllerBase {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block 
 			transaction.rollback();
-            e.printStackTrace();
+			e.printStackTrace();
             return_insert = new String("KO");
-		}		
+		}
 		return return_insert;
-	}	
+	}				
 	
-	@RequestMapping("/insertNew")
-	public @ResponseBody String insertNew(@RequestParam(value = "name", required = true, defaultValue = "") String name) {
+	@RequestMapping(value = "/remove", produces = "application/json")
+	public @ResponseBody String remove(@RequestParam(value = "string", required = true, defaultValue = "") String string) {
 		
 		String return_insert;
+		
 		Transaction transaction = session.beginTransaction();
 		try {
-			Products product = new Products();
-			product.setName(name);				
-			session.save(product);  
+			String[] data = string.split(",");
+			for (int i=0; i < data.length; i++) {
+				Products product = (Products) session.get(Products.class,new Integer(data[i]));
+				session.delete(product);  
+			}
 			transaction.commit();
             return_insert = new String("OK");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block 
 			transaction.rollback();
-            e.printStackTrace();
+			e.printStackTrace();
             return_insert = new String("KO");
-		}		
+		}
 		return return_insert;
-	}		
+	}	
 }
